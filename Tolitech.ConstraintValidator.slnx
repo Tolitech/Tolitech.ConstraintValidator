@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="README.md" />
+    <File Path="README.pt.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/ConstraintValidator.PostgreSql/Tolitech.ConstraintValidator.PostgreSql.csproj" />
+    <Project Path="src/ConstraintValidator.SqlServer/Tolitech.ConstraintValidator.SqlServer.csproj" />
+    <Project Path="src/ConstraintValidator/Tolitech.ConstraintValidator.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ConstraintValidator.PostgreSql/Tolitech.ConstraintValidator.PostgreSql.UnitTests.csproj" />
+    <Project Path="tests/ConstraintValidator.SqlServer/Tolitech.ConstraintValidator.SqlServer.UnitTests.csproj" />
+    <Project Path="tests/ConstraintValidator/Tolitech.ConstraintValidator.UnitTests.csproj" />
+  </Folder>
+</Solution>

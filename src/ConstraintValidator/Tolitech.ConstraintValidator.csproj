@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>$(AssemblyName)</Title>
+    <Version>1.0.0-preview.1</Version>
+    <Authors>Tolitech</Authors>
+    <Description>A static library providing tools for managing and validating database constraint exceptions. It allows for the registration of custom constraint validators and handles exceptions efficiently.</Description>
+    <Copyright>Copyright (c) 2025 Tolitech</Copyright>
+    <PackageProjectUrl>https://www.tolitech.com.br</PackageProjectUrl>
+    <PackageIcon>tolitech-icon.png</PackageIcon>
+    <PackageReadmeFile>README.en.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Tolitech/Tolitech.ConstraintValidator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>constraint</PackageTags>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>True</IsAotCompatible>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>True</IsAotCompatible>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\..\..\tolitech-icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Tolitech.Application.Exceptions" Version="1.0.0-preview.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="README.en.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
