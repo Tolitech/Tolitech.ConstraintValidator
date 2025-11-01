@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 
-using Tolitech.Application.Exceptions.Database;
+using Tolitech.Exceptions.Database;
 
 namespace Tolitech.ConstraintValidator.SqlServer.UnitTests;
 
