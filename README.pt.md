@@ -1,39 +1,39 @@
-# Tolitech.Infrastructure.Persistence.ConstraintValidator
+Ôªø# Tolitech.ConstraintValidator
 
-Biblioteca est·tica para gerenciar e validar exceÁıes de restriÁıes de banco de dados de forma agnÛstica, com implementaÁıes especÌficas para PostgreSQL e SQL Server.
+Biblioteca est√°tica para gerenciar e validar exce√ß√µes de restri√ß√µes de banco de dados de forma agn√≥stica, com implementa√ß√µes espec√≠ficas para PostgreSQL e SQL Server.
 
-## Vis„o Geral
+## Vis√£o Geral
 
-Esta biblioteca permite identificar e tratar exceÁıes de restriÁıes de integridade (chave prim·ria, chave estrangeira, not null, check) lanÁadas por bancos de dados, convertendo-as em exceÁıes customizadas para facilitar o tratamento na aplicaÁ„o.
+Esta biblioteca permite identificar e tratar exce√ß√µes de restri√ß√µes de integridade (chave prim√°ria, chave estrangeira, not null, check) lan√ßadas por bancos de dados, convertendo-as em exce√ß√µes customizadas para facilitar o tratamento na aplica√ß√£o.
 
-- **Tolitech.Infrastructure.Persistence.ConstraintValidator**: N˙cleo agnÛstico e interface para validadores.
-- **Tolitech.Infrastructure.Persistence.ConstraintValidator.PostgreSql**: Validador especÌfico para PostgreSQL.
-- **Tolitech.Infrastructure.Persistence.ConstraintValidator.SqlServer**: Validador especÌfico para SQL Server.
+- **Tolitech.ConstraintValidator**: N√∫cleo agn√≥stico e interface para validadores.
+- **Tolitech.ConstraintValidator.PostgreSql**: Validador espec√≠fico para PostgreSQL.
+- **Tolitech.ConstraintValidator.SqlServer**: Validador espec√≠fico para SQL Server.
 
-## InstalaÁ„o
+## Instala√ß√£o
 
 Adicione o pacote desejado ao seu projeto:
 
 ```bash
-dotnet add package Tolitech.Infrastructure.Persistence.ConstraintValidator
+dotnet add package Tolitech.ConstraintValidator
 
 # Para PostgreSQL:
-dotnet add package Tolitech.Infrastructure.Persistence.ConstraintValidator.PostgreSql
+dotnet add package Tolitech.ConstraintValidator.PostgreSql
 
 # Para SQL Server:
-dotnet add package Tolitech.Infrastructure.Persistence.ConstraintValidator.SqlServer
+dotnet add package Tolitech.ConstraintValidator.SqlServer
 ```
 
-## Uso B·sico
+## Uso B√°sico
 
 ### 1. Registrar o validador
 
-No inÌcio da aplicaÁ„o (ex: Startup):
+No in√≠cio da aplica√ß√£o (ex: Startup):
 
 ```csharp
-using Tolitech.Infrastructure.Persistence.ConstraintValidator;
-using Tolitech.Infrastructure.Persistence.ConstraintValidator.PostgreSql;
-using Tolitech.Infrastructure.Persistence.ConstraintValidator.SqlServer;
+using Tolitech.ConstraintValidator;
+using Tolitech.ConstraintValidator.PostgreSql;
+using Tolitech.ConstraintValidator.SqlServer;
 
 // Para PostgreSQL
 ConstraintValidatorManager.AddValidator(new PostgreSqlConstraintValidator());
@@ -42,21 +42,21 @@ ConstraintValidatorManager.AddValidator(new PostgreSqlConstraintValidator());
 ConstraintValidatorManager.AddValidator(new SqlServerConstraintValidator());
 ```
 
-### 2. Tratar exceÁıes de banco de dados
+### 2. Tratar exce√ß√µes de banco de dados
 
-Ao capturar exceÁıes de operaÁıes de banco de dados:
+Ao capturar exce√ß√µes de opera√ß√µes de banco de dados:
 
 ```csharp
 try
 {
-    // OperaÁ„o de banco de dados
+    // Opera√ß√£o de banco de dados
 }
 catch (Exception ex)
 {
     Exception tratada = ConstraintValidatorManager.Handle(ex);
     if (tratada is DatabaseConstraintViolationException)
     {
-        // LÛgica customizada para restriÁıes
+        // L√≥gica customizada para restri√ß√µes
     }
     else
     {
@@ -65,20 +65,20 @@ catch (Exception ex)
 }
 ```
 
-## Exemplos de ExceÁıes Tratadas
+## Exemplos de Exce√ß√µes Tratadas
 
 ### PostgreSQL
-- ViolaÁ„o de chave prim·ria: `SqlState = "23505"`
-- ViolaÁ„o de chave estrangeira: `SqlState = "23503"`
-- ViolaÁ„o de check: `SqlState = "23514"`
-- ViolaÁ„o de not null: `SqlState = "23502"`
+- Viola√ß√£o de chave prim√°ria: `SqlState = "23505"`
+- Viola√ß√£o de chave estrangeira: `SqlState = "23503"`
+- Viola√ß√£o de check: `SqlState = "23514"`
+- Viola√ß√£o de not null: `SqlState = "23502"`
 
 ### SQL Server
-- ViolaÁ„o de chave prim·ria: `Number = 2627`
-- ViolaÁ„o de chave estrangeira: `Number = 547`
-- ViolaÁ„o de not null: `Number = 515`
+- Viola√ß√£o de chave prim√°ria: `Number = 2627`
+- Viola√ß√£o de chave estrangeira: `Number = 547`
+- Viola√ß√£o de not null: `Number = 515`
 
-## IntegraÁ„o AvanÁada
+## Integra√ß√£o Avan√ßada
 
 ### Remover ou limpar validadores
 ```csharp
@@ -86,7 +86,7 @@ ConstraintValidatorManager.RemoveValidator(seuValidador);
 ConstraintValidatorManager.ClearValidators();
 ```
 
-### ImplementaÁ„o customizada
+### Implementa√ß√£o customizada
 Implemente `IConstraintValidator` para criar validadores para outros bancos:
 
 ```csharp
@@ -94,15 +94,15 @@ public class MyDbConstraintValidator : IConstraintValidator
 {
     public Exception HandleConstraintViolation(Exception exception)
     {
-        // Sua lÛgica
+        // Sua l√≥gica
     }
 }
 ```
 
-## BenefÌcios
-- CentralizaÁ„o do tratamento de exceÁıes de restriÁ„o.
-- Facilidade para internacionalizaÁ„o e logging.
-- ExtensÌvel para m˙ltiplos bancos.
+## Benef√≠cios
+- Centraliza√ß√£o do tratamento de exce√ß√µes de restri√ß√£o.
+- Facilidade para internacionaliza√ß√£o e logging.
+- Extens√≠vel para m√∫ltiplos bancos.
 
 ## Exemplos Modernos
 
@@ -116,7 +116,7 @@ catch (Exception ex)
 {
     var tratada = ConstraintValidatorManager.Handle(ex);
     if (tratada is PrimaryKeyViolationException)
-        // Notifique usu·rio sobre duplicidade
+        // Notifique usu√°rio sobre duplicidade
 }
 ```
 
@@ -141,4 +141,4 @@ public IActionResult Criar([FromBody] MeuObjeto obj)
 
 ---
 
-> **Tolitech.Infrastructure.Persistence.ConstraintValidator** simplifica o tratamento de exceÁıes de restriÁ„o, tornando seu cÛdigo mais limpo, seguro e preparado para m˙ltiplos bancos de dados.
+> **Tolitech.ConstraintValidator** simplifica o tratamento de exce√ß√µes de restri√ß√£o, tornando seu c√≥digo mais limpo, seguro e preparado para m√∫ltiplos bancos de dados.

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.Serialization;
 
 using Microsoft.Data.SqlClient;
 
@@ -7,93 +8,88 @@ namespace Tolitech.ConstraintValidator.SqlServer.UnitTests;
 /// <summary>
 /// Provides a factory for creating instances of <see cref="SqlException"/> for testing purposes.
 /// </summary>
-/// <remarks>This class is designed to facilitate the creation of <see cref="SqlException"/> objects with
-/// specified error numbers and optional messages. It is particularly useful in unit testing scenarios where simulating
-/// SQL exceptions is necessary.</remarks>
+/// <remarks>This class creates a minimal, but valid, SqlException without any inner exception,
+/// so GetBaseException() returns the SqlException itself.</remarks>
 public static class SqlExceptionFactory
 {
     /// <summary>
     /// Creates a new instance of <see cref="SqlException"/> with a specified error number and an optional message.
     /// </summary>
-    /// <remarks>This method is intended for testing purposes, allowing the creation of a <see
-    /// cref="SqlException"/> with a specific error number and message. The method dynamically constructs the necessary
-    /// internal objects to simulate a real SQL exception.</remarks>
     /// <param name="errorNumber">The error number associated with the SQL exception.</param>
     /// <param name="message">An optional message describing the error. If not provided, a default message is used.</param>
     /// <returns>A <see cref="SqlException"/> instance representing the specified SQL error.</returns>
-    /// <exception cref="InvalidOperationException">Thrown if a compatible constructor for <see cref="SqlError"/> cannot be found.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when a compatible constructor for <see cref="SqlError"/> cannot be found.</exception>
     public static SqlException Create(int errorNumber, string? message = null)
     {
-        // Find the SqlError type
+        // Build SqlError dynamically (constructor is non-public and differs across versions)
         var sqlErrorType = typeof(SqlError);
-
-        // Find the most suitable constructor, based on the minimum expected parameter count (== 9)
-        var constructor = sqlErrorType
+        var errorCtor = sqlErrorType
             .GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic)
             .FirstOrDefault(c =>
             {
-                var parameters = c.GetParameters();
-                return parameters.Length == 9 &&
-                       parameters[0].ParameterType == typeof(int); // error number
+                var p = c.GetParameters();
+                return p.Length >= 9 && p[0].ParameterType == typeof(int);
             }) ?? throw new InvalidOperationException("Could not find a compatible constructor for SqlError.");
 
-        // Dynamically create parameters based on the found constructor signature
-        var ctorParams = constructor.GetParameters();
-        object?[] args = new object?[ctorParams.Length];
+        var ctorParams = errorCtor.GetParameters();
+        object?[] errorArgs = new object?[ctorParams.Length];
 
         for (int i = 0; i < ctorParams.Length; i++)
         {
-            var type = ctorParams[i].ParameterType;
+            var t = ctorParams[i].ParameterType;
 
-            if (type == typeof(int))
+            if (t == typeof(int))
             {
-                args[i] = (i == 0) ? errorNumber : 1;
+                errorArgs[i] = (i == 0) ? errorNumber : 1;
             }
-            else if (type == typeof(byte))
+            else if (t == typeof(byte))
             {
-                args[i] = (byte)1;
+                errorArgs[i] = (byte)1;
             }
-            else if (type == typeof(string))
+            else if (t == typeof(string))
             {
-                args[i] = message ?? "Fake SQL exception for testing.";
+                errorArgs[i] = message ?? "Fake SQL exception for testing.";
             }
-            else if (type == typeof(uint))
+            else if (t == typeof(uint))
             {
-                args[i] = 0u;
+                errorArgs[i] = 0u;
             }
             else
             {
-                args[i] = null!;
+                errorArgs[i] = null!;
             }
         }
 
-        object sqlError = constructor.Invoke(args);
+        object sqlError = errorCtor.Invoke(errorArgs);
 
         // Create SqlErrorCollection and add the error
-        SqlErrorCollection errorCollection = (SqlErrorCollection)Activator
-            .CreateInstance(typeof(SqlErrorCollection), nonPublic: true)!;
-
+        SqlErrorCollection errorCollection = (SqlErrorCollection)Activator.CreateInstance(typeof(SqlErrorCollection), nonPublic: true)!;
         typeof(SqlErrorCollection)
             .GetMethod("Add", BindingFlags.Instance | BindingFlags.NonPublic)!
             .Invoke(errorCollection, [sqlError]);
 
-        // Fix ambiguity: select the exact method with the correct parameters
-        var createException = typeof(SqlException)
-            .GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
-            .First(m =>
-            {
-                var parameters = m.GetParameters();
-                return m.Name == "CreateException"
-                       && parameters.Length == 2
-                       && parameters[0].ParameterType == typeof(SqlErrorCollection)
-                       && parameters[1].ParameterType == typeof(string);
-            });
+        // Create an uninitialized SqlException (no constructor invoked, no inner exception)
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
+        SqlException ex = (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
+#pragma warning restore SYSLIB0050 // Type or member is obsolete
 
-        return (SqlException)createException.Invoke(
-            null,
-            [
-                errorCollection,
-                "11.0.0",
-            ])!;
+        // Set the private field that stores the errors
+        var errorsField = typeof(SqlException)
+            .GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+            .FirstOrDefault(f => f.FieldType == typeof(SqlErrorCollection))
+            ?? throw new InvalidOperationException("Could not find SqlException error collection field.");
+
+        errorsField.SetValue(ex, errorCollection);
+
+        // Set HResult to the standard SqlException HRESULT (-2146232060 / 0x80131904)
+        var hresultField = typeof(Exception).GetField("_HResult", BindingFlags.Instance | BindingFlags.NonPublic);
+        hresultField?.SetValue(ex, unchecked((int)0x80131904));
+
+        // Optionally set a friendly base message if supported by the current runtime layout
+        // (SqlException.Message often formats from Errors; setting this is not strictly required)
+        var messageField = typeof(Exception).GetField("_message", BindingFlags.Instance | BindingFlags.NonPublic);
+        messageField?.SetValue(ex, message ?? "Fake SQL exception for testing.");
+
+        return ex;
     }
 }
