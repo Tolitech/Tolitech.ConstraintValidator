@@ -1,6 +1,6 @@
 ﻿using Npgsql;
 
-using Tolitech.Application.Exceptions.Database;
+using Tolitech.Exceptions.Database;
 
 namespace Tolitech.ConstraintValidator.PostgreSql;
 
