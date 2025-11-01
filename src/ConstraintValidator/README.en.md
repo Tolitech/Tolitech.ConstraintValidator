@@ -1,4 +1,4 @@
-# Tolitech.Infrastructure.Persistence.ConstraintValidator
+﻿# Tolitech.ConstraintValidator
 
 A static library for managing and validating database constraint exceptions in a database-agnostic way, with specific implementations for PostgreSQL and SQL Server.
 
@@ -6,22 +6,22 @@ A static library for managing and validating database constraint exceptions in a
 
 This library helps you identify and handle integrity constraint exceptions (primary key, foreign key, not null, check) thrown by databases, converting them into custom exceptions for easier handling in your application.
 
-- **Tolitech.Infrastructure.Persistence.ConstraintValidator**: Core and interface for validators.
-- **Tolitech.Infrastructure.Persistence.ConstraintValidator.PostgreSql**: PostgreSQL-specific validator.
-- **Tolitech.Infrastructure.Persistence.ConstraintValidator.SqlServer**: SQL Server-specific validator.
+- **Tolitech.ConstraintValidator**: Core and interface for validators.
+- **Tolitech.ConstraintValidator.PostgreSql**: PostgreSQL-specific validator.
+- **Tolitech.ConstraintValidator.SqlServer**: SQL Server-specific validator.
 
 ## Installation
 
 Add the desired package to your project:
 
 ```bash
-dotnet add package Tolitech.Infrastructure.Persistence.ConstraintValidator
+dotnet add package Tolitech.ConstraintValidator
 
 # For PostgreSQL:
-dotnet add package Tolitech.Infrastructure.Persistence.ConstraintValidator.PostgreSql
+dotnet add package Tolitech.ConstraintValidator.PostgreSql
 
 # For SQL Server:
-dotnet add package Tolitech.Infrastructure.Persistence.ConstraintValidator.SqlServer
+dotnet add package Tolitech.ConstraintValidator.SqlServer
 ```
 
 ## Basic Usage
@@ -31,9 +31,9 @@ dotnet add package Tolitech.Infrastructure.Persistence.ConstraintValidator.SqlSe
 At application startup (e.g., Startup):
 
 ```csharp
-using Tolitech.Infrastructure.Persistence.ConstraintValidator;
-using Tolitech.Infrastructure.Persistence.ConstraintValidator.PostgreSql;
-using Tolitech.Infrastructure.Persistence.ConstraintValidator.SqlServer;
+using Tolitech.ConstraintValidator;
+using Tolitech.ConstraintValidator.PostgreSql;
+using Tolitech.ConstraintValidator.SqlServer;
 
 // For PostgreSQL
 ConstraintValidatorManager.AddValidator(new PostgreSqlConstraintValidator());
@@ -141,4 +141,4 @@ public IActionResult Create([FromBody] MyObject obj)
 
 ---
 
-> **Tolitech.Infrastructure.Persistence.ConstraintValidator** makes constraint exception handling simple, clean, and ready for multiple databases.
+> **Tolitech.ConstraintValidator** makes constraint exception handling simple, clean, and ready for multiple databases.
