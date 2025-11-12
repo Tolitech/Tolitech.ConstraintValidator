@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>$(AssemblyName)</Title>
-    <Version>1.0.0-preview.1</Version>
+    <Version>1.0.0</Version>
     <Authors>Tolitech</Authors>
     <Description>A static library providing tools for managing and validating database constraint exceptions. It allows for the registration of custom constraint validators and handles exceptions efficiently.</Description>
     <Copyright>Copyright (c) 2025 Tolitech</Copyright>
@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Tolitech.Exceptions" Version="1.0.0-preview.1" />
+    <PackageReference Include="Tolitech.Exceptions" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
