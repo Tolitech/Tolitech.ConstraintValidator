@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>$(AssemblyName)</Title>
-    <Version>1.0.0-preview.2</Version>
+    <Version>1.0.0</Version>
     <Authors>Tolitech</Authors>
     <Description>A static library for managing and validating database constraint exceptions specifically for PostgreSQL.</Description>
     <Copyright>Copyright (c) 2025 Tolitech</Copyright>
@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Npgsql" Version="10.0.0-rc.1" />
+    <PackageReference Include="Npgsql" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
